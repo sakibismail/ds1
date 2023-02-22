@@ -1,0 +1,153 @@
+#include<stdio.h>
+#include<stdlib.h>
+struct NODE{
+ int exponent ;
+ int coefficient ;
+ struct NODE *next ;
+};
+struct NODE *HEADER_1, *HEADER_2, *HEADER_3 ;
+int number_of_terms_1 ;
+int number_of_terms_2 ;
+void inputPolynomial(struct NODE *HEADER, int number_of_terms )
+{
+ struct NODE *new = (struct NODE*)malloc(sizeof(struct NODE)) ;
+ for (int i = 0; i < number_of_terms; i++)
+ {
+ int value ;
+ printf("Input Coefficient :- ") ;
+ scanf("%d",&value) ;
+ int exp ;
+ printf("Input Exponent :- ") ;
+ scanf("%d",&exp) ;
+new -> coefficient = value ;
+ new -> exponent = exp ;
+ if (i == 0)
+ {
+ HEADER -> next = new ;
+ }
+ if ( i == (number_of_terms - 1))
+ {
+ new -> next = NULL ;
+ }
+ else
+ {
+ struct NODE *ptr = new ;
+ new = (struct NODE*)malloc(sizeof(struct NODE)) ;
+ ptr -> next = new ;
+ }
+ }
+}
+void displayPolynomial(struct NODE *HEADER)
+{
+ struct NODE *ptr = HEADER ;
+ while (ptr -> next != NULL)
+ {
+ ptr = ptr -> next ;
+ printf("%d X^(%d)", ptr -> coefficient, ptr -> exponent) ;
+if(ptr -> next != NULL)
+ {
+ printf(" + ") ;
+ }
+ }
+ printf("\n") ;
+}
+void addPolynomial(struct NODE *HEADER, int t1, int t2)
+{
+ struct NODE *new = (struct NODE*)malloc(sizeof(struct NODE)) ;
+ HEADER -> next = new ;
+ struct NODE *ptr1 = HEADER_1 -> next ;
+ struct NODE *ptr2 = HEADER_2 -> next ;
+ struct NODE *ptr ;
+ int i = 0 ;
+ int j = 0 ;
+ while((i < t1) || (j < t2))
+ {
+ if ((i < t1) && (j < t2))
+ {
+ while((i < t1) && (j < t2))
+ {
+ if ((ptr1 -> exponent) > (ptr2 -> exponent))
+ {
+ new -> coefficient = ptr1 -> coefficient ;
+ new -> exponent = ptr1 -> exponent ;
+ ptr1 = ptr1 -> next ;
+ ptr = new ;
+ new = (struct NODE*)malloc(sizeof(struct NODE)) ;
+ ptr -> next = new ;
+ i++ ;
+ }
+ else if ((ptr1 -> exponent) < (ptr2 -> exponent))
+ {
+ new -> coefficient = ptr2 -> coefficient ;
+ new -> exponent = ptr2 -> exponent ;
+ ptr2 = ptr2 -> next ;
+ ptr = new ;
+ new = (struct NODE*)malloc(sizeof(struct NODE)) ;
+ ptr -> next = new ;
+ j++ ;
+ }
+ else
+ {
+ new -> coefficient = ptr1 -> coefficient + ptr2 -> coefficient ;
+ new -> exponent = ptr1 -> exponent ;
+ ptr1 = ptr1 -> next ;
+ ptr2 = ptr2 -> next ;
+ ptr = new ;
+ new = (struct NODE*)malloc(sizeof(struct NODE)) ;
+ ptr -> next = new ;
+ i++ ;
+ j++ ;
+ }
+ }
+ }
+ else if (i < t1)
+ {
+while(i < t1)
+{
+
+new -> coefficient = ptr1 -> coefficient ;
+ new -> exponent = ptr1 -> exponent ;
+ ptr1 = ptr1 -> next ;
+ ptr = new ;
+ new = (struct NODE*)malloc(sizeof(struct NODE)) ;
+ ptr -> next = new ;
+ i++ ;
+}
+ }
+ else if (j < t2)
+ {
+while(j < t2)
+{
+ new -> coefficient = ptr2 -> coefficient ;
+ new -> exponent = ptr2 -> exponent ;
+ ptr2 = ptr2 -> next ;
+ ptr = new ;
+ new = (struct NODE*)malloc(sizeof(struct NODE)) ;
+ ptr -> next = new ;
+ j++ ;
+}
+
+}
+ }
+ ptr -> next = NULL ;
+}
+void main()
+{
+ printf("Input number of terms of Polynomial 1 :- ") ;
+ scanf("%d", &number_of_terms_1) ;
+ HEADER_1 = (struct NODE*)malloc(sizeof(struct NODE)) ;
+ inputPolynomial(HEADER_1, number_of_terms_1) ;
+ printf("Input number of terms of Polynomial 2 :- ") ;
+ scanf("%d", &number_of_terms_2) ;
+ HEADER_2 = (struct NODE*)malloc(sizeof(struct NODE)) ;
+ inputPolynomial(HEADER_2, number_of_terms_2) ;
+ printf("Polynomial 1 :- ") ;
+ displayPolynomial(HEADER_1) ;
+ printf("Polynomial 2 :- ") ;
+ displayPolynomial(HEADER_2) ;
+ printf("\nThe sum is :- \n") ;
+ HEADER_3 = (struct NODE*)malloc(sizeof(struct NODE)) ;
+ HEADER_3 -> next = NULL ;
+ addPolynomial(HEADER_3, number_of_terms_1, number_of_terms_2) ;
+ displayPolynomial(HEADER_3) ;
+} 
